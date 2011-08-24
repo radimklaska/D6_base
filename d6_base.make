@@ -19,7 +19,50 @@ projects[drupal][version] = 6
   
 ; Modules
 ; --------
-projects[] = colorpicker
+; Custom modules:
+
+; Tradeimport.cz
+projects[tradeimport_customs][type] = module
+projects[tradeimport_customs][download][type] = git
+projects[tradeimport_customs][download][url] = git://github.com/radimklaska/tradeimport_customs.git
+                
+
+
+; Specific versions and other unusual stuff
+
+;
+projects[imageinfo_cache][type] = module
+projects[imageinfo_cache][download][type] = file
+projects[imageinfo_cache][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz   
+
+;
+projects[data][type] = module
+projects[data][download][type] = file
+projects[data][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz  
+
+;
+projects[private_upload][type] = module
+projects[private_upload][download][type] = file
+projects[private_upload][download][url] = http://ftp.drupal.org/files/projects/private_upload-6.x-1.0-rc3.tar.gz  
+
+;
+projects[variable_clean][type] = module
+projects[variable_clean][download][type] = file
+projects[variable_clean][download][url] = http://ftp.drupal.org/files/projects/variable_clean-6.x-1.x-dev.tar.gz  
+
+;
+projects[og_forum][type] = module
+projects[og_forum][download][type] = file
+projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz  
+
+;
+projects[glossary][type] = module
+projects[glossary][download][type] = file
+projects[glossary][download][url] = http://ftp.drupal.org/files/projects/glossary-6.x-1.6.tar.gz
+
+
+  
+; Common modules
 projects[] = acl
 projects[] = addtoany
 projects[] = admin
@@ -38,6 +81,7 @@ projects[] = boost
 projects[] = cache
 projects[] = calendar
 projects[] = cck
+projects[] = colorpicker
 projects[] = comment_notify
 projects[] = config_perms
 projects[] = contemplate
@@ -57,7 +101,6 @@ projects[] = email
 projects[] = emfield
 projects[] = extlink
 projects[] = faq
-projects[] = fb
 projects[] = fbconnect
 projects[] = features
 projects[] = feedapi
@@ -79,7 +122,6 @@ projects[] = forum_access
 projects[] = fpa
 projects[] = geshifilter
 projects[] = globalredirect
-projects[] = glossary
 projects[] = gmap
 projects[] = google_analytics
 projects[] = hovertip
@@ -90,7 +132,6 @@ projects[] = imagecache
 projects[] = imagecache_actions
 projects[] = imagefield
 projects[] = imagefield_import
-projects[] = imageinfo_cache
 projects[] = imce
 projects[] = imce_wysiwyg
 projects[] = insert
@@ -124,12 +165,9 @@ projects[] = notifications
 projects[] = notifications_extra
 projects[] = notifications_team
 projects[] = og
-projects[] = og_forum
 projects[] = panels
 projects[] = pathauto
-projects[] = pbc
 projects[] = phone
-projects[] = private_upload
 projects[] = privatemsg
 projects[] = quicktabs
 projects[] = rate
@@ -163,7 +201,6 @@ projects[] = taxonomy_manager
 projects[] = taxonomy_menu
 projects[] = taxonomy_super_select
 projects[] = token
-projects[] = tradeimport_customs
 projects[] = transliteration
 projects[] = tweetbutton
 projects[] = twitter
@@ -175,7 +212,6 @@ projects[] = uc_pma
 projects[] = uc_product_power_tools
 projects[] = uc_vat
 projects[] = user_import
-projects[] = variable_clean
 projects[] = vd
 projects[] = video_filter
 projects[] = views
