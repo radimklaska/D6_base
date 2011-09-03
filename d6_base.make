@@ -38,6 +38,7 @@ projects[] = boost
 projects[] = cache
 projects[] = calendar
 projects[] = cck
+projects[] = cck_autocomplete
 projects[] = comment_notify
 projects[] = config_perms
 projects[] = contemplate
