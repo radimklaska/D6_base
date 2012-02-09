@@ -1,13 +1,14 @@
 ; Core version
 ; ------------
-  
+
+
 core = 6.x
 
-  
-  
+
+
 ; API version
 ; ------------
-  
+
 api = 2
 
 
@@ -15,8 +16,8 @@ api = 2
 ; Drupal 6.x core:
 projects[drupal][version] = 6
 
-  
-  
+
+
 ; Modules
 ; --------
 ; Custom modules:
@@ -25,37 +26,32 @@ projects[drupal][version] = 6
 projects[tradeimport_customs][type] = module
 projects[tradeimport_customs][download][type] = git
 projects[tradeimport_customs][download][url] = git://github.com/radimklaska/tradeimport_customs.git
-                
+
 
 
 ; Specific versions and other unusual stuff
 
-;
+; version
 projects[imageinfo_cache][type] = module
 projects[imageinfo_cache][download][type] = file
-projects[imageinfo_cache][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz   
+projects[imageinfo_cache][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz
 
-;
-projects[data][type] = module
-projects[data][download][type] = file
-projects[data][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz  
-
-;
+; version
 projects[private_upload][type] = module
 projects[private_upload][download][type] = file
-projects[private_upload][download][url] = http://ftp.drupal.org/files/projects/private_upload-6.x-1.0-rc3.tar.gz  
+projects[private_upload][download][url] = http://ftp.drupal.org/files/projects/private_upload-6.x-1.0-rc3.tar.gz
 
-;
+; version
 projects[variable_clean][type] = module
 projects[variable_clean][download][type] = file
-projects[variable_clean][download][url] = http://ftp.drupal.org/files/projects/variable_clean-6.x-1.x-dev.tar.gz  
+projects[variable_clean][download][url] = http://ftp.drupal.org/files/projects/variable_clean-6.x-1.x-dev.tar.gz
 
-;
+; patch
 projects[og_forum][type] = module
 projects[og_forum][download][type] = file
-projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz  
+projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz
 
-;
+; version
 projects[glossary][type] = module
 projects[glossary][download][type] = file
 projects[glossary][download][url] = http://ftp.drupal.org/files/projects/glossary-6.x-1.6.tar.gz
@@ -232,23 +228,67 @@ projects[] = websnapr_field
 projects[] = workflow
 projects[] = workflow_fields
 projects[] = wysiwyg
-projects[] = xmlsitemap   
+projects[] = xmlsitemap
 
-  
+
 
 ; Themes
-; --------            
+; --------
 projects[] = acquia_prosper
 projects[] = fusion
 projects[] = ninesixty
 projects[] = rootcandy
-  
-  
+
+
 ; Libraries
 ; ---------
 libraries[jquery][download][type] = "file"
 libraries[jquery][download][url] = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"
+
 libraries[jqueryui][download][type] = "file"
 libraries[jqueryui][download][url] = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"
 
+libraries[jwysiwyg][download][type] = "file"
+libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"
 
+
+
+; START waiting for this issue: http://drupal.org/node/1258660
+libraries[jwysiwyg][download][type] = "file"
+libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"
+libraries[jwysiwyg][destination] = "libraries"
+
+libraries[markitup][download][type] = "file"
+libraries[markitup][download][url] = "https://raw.github.com/markitup/1.x/master/markitup/jquery.markitup.js"
+libraries[markitup][destination] = "libraries/markitup" 
+
+libraries[fckeditor][download][type] = "file"
+libraries[fckeditor][download][url] = "http://sourceforge.net/project/downloading.php?group_id=75348&filename=FCKeditor_2.6.6.tar.gz"
+libraries[fckeditor][destination] = "libraries"
+
+libraries[whizzywig][download][type] = "file"
+libraries[whizzywig][download][url] = "http://whizzywig.googlecode.com/files/whizzywig63.js"
+libraries[whizzywig][destination] = "libraries" 
+
+;I don't know how to download this thing. Maybe you know... ;-)
+;libraries[nicedit][download][type] = "file"
+;libraries[nicedit][download][url] = "http://nicedit.com/download.php/?WHATCANIDO?/nicEdit.js"
+;libraries[nicedit][download][url] = "http://nicedit.com/dl.php/?WHATCANIDO?/nicEdit.js"
+;libraries[nicedit][destination] = "libraries"
+
+libraries[yui][download][type] = "file"
+libraries[yui][download][url] = "https://raw.github.com/yui/yui2/master/build/yuiloader-dom-event/yuiloader-dom-event.js"
+libraries[yui][destination] = "libraries/yui/build/yahoo-dom-event"
+
+libraries[ckeditor][download][type] = "file"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.1/ckeditor_3.6.1.tar.gz"
+libraries[ckeditor][destination] = "libraries"
+
+libraries[openwysiwyg][download][type] = "file"
+libraries[openwysiwyg][download][url] = "http://www.openwebware.com/openwysiwyg_v1.4.7.zip"
+libraries[openwysiwyg][destination] = "libraries"
+
+libraries[wymeditor][download][type] = "file"
+libraries[wymeditor][download][url] = "http://www.wymeditor.org/download/file.php?f=wymeditor-0.5-rc-2.tar.gz"
+libraries[wymeditor][destination] = "libraries"
+; STOP waiting for this issue: http://drupal.org/node/1258660
