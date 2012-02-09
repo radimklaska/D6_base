@@ -168,6 +168,7 @@ projects[] = privatemsg
 projects[] = quicktabs
 projects[] = rate
 projects[] = readonlymode
+projects[] = reroute_email
 projects[] = revisioning
 projects[] = robotstxt
 projects[] = rules
