@@ -78,6 +78,7 @@ projects[] = cache
 projects[] = calendar
 projects[] = cck
 projects[] = colorpicker
+projects[] = cck_autocomplete
 projects[] = comment_notify
 projects[] = config_perms
 projects[] = contemplate
