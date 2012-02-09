@@ -22,10 +22,10 @@ projects[drupal][version] = 6
 ; --------
 ; Custom modules:
 
-; Tradeimport.cz
-projects[tradeimport_customs][type] = module
-projects[tradeimport_customs][download][type] = git
-projects[tradeimport_customs][download][url] = git://github.com/radimklaska/tradeimport_customs.git
+; Tradeimport.cz - Moved to site specific folder
+;projects[tradeimport_customs][type] = module
+;projects[tradeimport_customs][download][type] = git
+;projects[tradeimport_customs][download][url] = git://github.com/radimklaska/tradeimport_customs.git
 
 
 
