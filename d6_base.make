@@ -71,6 +71,7 @@ projects[] = apachesolr
 projects[] = auto_nodetitle
 projects[] = autocomplete_widgets
 projects[] = backup_migrate
+projects[] = better_formats
 projects[] = block_class
 projects[] = blockcache_alter
 projects[] = boost
