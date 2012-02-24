@@ -77,6 +77,7 @@ projects[] = boost
 projects[] = cache
 projects[] = calendar
 projects[] = cck
+projects[] = colorbox
 projects[] = colorpicker
 projects[] = cck_autocomplete
 projects[] = comment_notify
