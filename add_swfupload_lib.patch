@@ -4,19 +4,19 @@ Date: Sun, 4 Mar 2012 06:48:33 +0100
 Subject: [PATCH] swf
 
 ---
- image_fupload/swfupload/swfupload.js       |  980 ++++++++++++++++++++++++++++
- image_fupload/swfupload/swfupload.queue.js |   98 +++
- image_fupload/swfupload/swfupload.swf      |  Bin 0 -> 12787 bytes
+ swfupload/swfupload.js       |  980 ++++++++++++++++++++++++++++
+ swfupload/swfupload.queue.js |   98 +++
+ swfupload/swfupload.swf      |  Bin 0 -> 12787 bytes
  3 files changed, 1078 insertions(+), 0 deletions(-)
- create mode 100644 image_fupload/swfupload/swfupload.js
- create mode 100644 image_fupload/swfupload/swfupload.queue.js
- create mode 100644 image_fupload/swfupload/swfupload.swf
+ create mode 100644 swfupload/swfupload.js
+ create mode 100644 swfupload/swfupload.queue.js
+ create mode 100644 swfupload/swfupload.swf
 
-diff --git a/image_fupload/swfupload/swfupload.js b/image_fupload/swfupload/swfupload.js
+diff --git a/swfupload/swfupload.js b/swfupload/swfupload.js
 new file mode 100644
 index 0000000..e65b19c
 --- /dev/null
-+++ b/image_fupload/swfupload/swfupload.js
++++ b/swfupload/swfupload.js
 @@ -0,0 +1,980 @@
 +/**
 + * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
@@ -998,11 +998,11 @@ index 0000000..e65b19c
 +		alert("Exception: " + ex.name + " Message: " + ex.message);
 +	}
 +};
-diff --git a/image_fupload/swfupload/swfupload.queue.js b/image_fupload/swfupload/swfupload.queue.js
+diff --git a/swfupload/swfupload.queue.js b/swfupload/swfupload.queue.js
 new file mode 100644
 index 0000000..69e619d
 --- /dev/null
-+++ b/image_fupload/swfupload/swfupload.queue.js
++++ b/swfupload/swfupload.queue.js
 @@ -0,0 +1,98 @@
 +/*
 +	Queue Plug-in
@@ -1103,7 +1103,7 @@ index 0000000..69e619d
 +	};
 +}
 \ No newline at end of file
-diff --git a/image_fupload/swfupload/swfupload.swf b/image_fupload/swfupload/swfupload.swf
+diff --git a/swfupload/swfupload.swf b/swfupload/swfupload.swf
 new file mode 100644
 index 0000000000000000000000000000000000000000..e3f767031ca8243a5f0b89bc0f154cc5962e01e9
 GIT binary patch
