@@ -1,0 +1,1364 @@
+From 46db25206b23baa73b0634ba241396085895aa00 Mon Sep 17 00:00:00 2001
+From: Radim Klaska <radim@klaska.net>
+Date: Sun, 4 Mar 2012 06:48:33 +0100
+Subject: [PATCH] swf
+
+---
+ image_fupload/swfupload/swfupload.js       |  980 ++++++++++++++++++++++++++++
+ image_fupload/swfupload/swfupload.queue.js |   98 +++
+ image_fupload/swfupload/swfupload.swf      |  Bin 0 -> 12787 bytes
+ 3 files changed, 1078 insertions(+), 0 deletions(-)
+ create mode 100644 image_fupload/swfupload/swfupload.js
+ create mode 100644 image_fupload/swfupload/swfupload.queue.js
+ create mode 100644 image_fupload/swfupload/swfupload.swf
+
+diff --git a/image_fupload/swfupload/swfupload.js b/image_fupload/swfupload/swfupload.js
+new file mode 100644
+index 0000000..e65b19c
+--- /dev/null
++++ b/image_fupload/swfupload/swfupload.js
+@@ -0,0 +1,980 @@
++/**
++ * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
++ *
++ * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
++ *
++ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzén and Mammon Media and is released under the MIT License:
++ * http://www.opensource.org/licenses/mit-license.php
++ *
++ * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
++ * http://www.opensource.org/licenses/mit-license.php
++ *
++ */
++
++
++/* ******************* */
++/* Constructor & Init  */
++/* ******************* */
++var SWFUpload;
++
++if (SWFUpload == undefined) {
++	SWFUpload = function (settings) {
++		this.initSWFUpload(settings);
++	};
++}
++
++SWFUpload.prototype.initSWFUpload = function (settings) {
++	try {
++		this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
++		this.settings = settings;
++		this.eventQueue = [];
++		this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
++		this.movieElement = null;
++
++
++		// Setup global control tracking
++		SWFUpload.instances[this.movieName] = this;
++
++		// Load the settings.  Load the Flash movie.
++		this.initSettings();
++		this.loadFlash();
++		this.displayDebugInfo();
++	} catch (ex) {
++		delete SWFUpload.instances[this.movieName];
++		throw ex;
++	}
++};
++
++/* *************** */
++/* Static Members  */
++/* *************** */
++SWFUpload.instances = {};
++SWFUpload.movieCount = 0;
++SWFUpload.version = "2.2.0 2009-03-25";
++SWFUpload.QUEUE_ERROR = {
++	QUEUE_LIMIT_EXCEEDED	  		: -100,
++	FILE_EXCEEDS_SIZE_LIMIT  		: -110,
++	ZERO_BYTE_FILE			  		: -120,
++	INVALID_FILETYPE		  		: -130
++};
++SWFUpload.UPLOAD_ERROR = {
++	HTTP_ERROR				  		: -200,
++	MISSING_UPLOAD_URL	      		: -210,
++	IO_ERROR				  		: -220,
++	SECURITY_ERROR			  		: -230,
++	UPLOAD_LIMIT_EXCEEDED	  		: -240,
++	UPLOAD_FAILED			  		: -250,
++	SPECIFIED_FILE_ID_NOT_FOUND		: -260,
++	FILE_VALIDATION_FAILED	  		: -270,
++	FILE_CANCELLED			  		: -280,
++	UPLOAD_STOPPED					: -290
++};
++SWFUpload.FILE_STATUS = {
++	QUEUED		 : -1,
++	IN_PROGRESS	 : -2,
++	ERROR		 : -3,
++	COMPLETE	 : -4,
++	CANCELLED	 : -5
++};
++SWFUpload.BUTTON_ACTION = {
++	SELECT_FILE  : -100,
++	SELECT_FILES : -110,
++	START_UPLOAD : -120
++};
++SWFUpload.CURSOR = {
++	ARROW : -1,
++	HAND : -2
++};
++SWFUpload.WINDOW_MODE = {
++	WINDOW : "window",
++	TRANSPARENT : "transparent",
++	OPAQUE : "opaque"
++};
++
++// Private: takes a URL, determines if it is relative and converts to an absolute URL
++// using the current site. Only processes the URL if it can, otherwise returns the URL untouched
++SWFUpload.completeURL = function(url) {
++	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
++		return url;
++	}
++	
++	var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
++	
++	var indexSlash = window.location.pathname.lastIndexOf("/");
++	if (indexSlash <= 0) {
++		path = "/";
++	} else {
++		path = window.location.pathname.substr(0, indexSlash) + "/";
++	}
++	
++	return /*currentURL +*/ path + url;
++	
++};
++
++
++/* ******************** */
++/* Instance Members  */
++/* ******************** */
++
++// Private: initSettings ensures that all the
++// settings are set, getting a default value if one was not assigned.
++SWFUpload.prototype.initSettings = function () {
++	this.ensureDefault = function (settingName, defaultValue) {
++		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
++	};
++	
++	// Upload backend settings
++	this.ensureDefault("upload_url", "");
++	this.ensureDefault("preserve_relative_urls", false);
++	this.ensureDefault("file_post_name", "Filedata");
++	this.ensureDefault("post_params", {});
++	this.ensureDefault("use_query_string", false);
++	this.ensureDefault("requeue_on_error", false);
++	this.ensureDefault("http_success", []);
++	this.ensureDefault("assume_success_timeout", 0);
++	
++	// File Settings
++	this.ensureDefault("file_types", "*.*");
++	this.ensureDefault("file_types_description", "All Files");
++	this.ensureDefault("file_size_limit", 0);	// Default zero means "unlimited"
++	this.ensureDefault("file_upload_limit", 0);
++	this.ensureDefault("file_queue_limit", 0);
++
++	// Flash Settings
++	this.ensureDefault("flash_url", "swfupload.swf");
++	this.ensureDefault("prevent_swf_caching", true);
++	
++	// Button Settings
++	this.ensureDefault("button_image_url", "");
++	this.ensureDefault("button_width", 1);
++	this.ensureDefault("button_height", 1);
++	this.ensureDefault("button_text", "");
++	this.ensureDefault("button_text_style", "color: #000000; font-size: 16pt;");
++	this.ensureDefault("button_text_top_padding", 0);
++	this.ensureDefault("button_text_left_padding", 0);
++	this.ensureDefault("button_action", SWFUpload.BUTTON_ACTION.SELECT_FILES);
++	this.ensureDefault("button_disabled", false);
++	this.ensureDefault("button_placeholder_id", "");
++	this.ensureDefault("button_placeholder", null);
++	this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
++	this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
++	
++	// Debug Settings
++	this.ensureDefault("debug", false);
++	this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
++	
++	// Event Handlers
++	this.settings.return_upload_start_handler = this.returnUploadStart;
++	this.ensureDefault("swfupload_loaded_handler", null);
++	this.ensureDefault("file_dialog_start_handler", null);
++	this.ensureDefault("file_queued_handler", null);
++	this.ensureDefault("file_queue_error_handler", null);
++	this.ensureDefault("file_dialog_complete_handler", null);
++	
++	this.ensureDefault("upload_start_handler", null);
++	this.ensureDefault("upload_progress_handler", null);
++	this.ensureDefault("upload_error_handler", null);
++	this.ensureDefault("upload_success_handler", null);
++	this.ensureDefault("upload_complete_handler", null);
++	
++	this.ensureDefault("debug_handler", this.debugMessage);
++
++	this.ensureDefault("custom_settings", {});
++
++	// Other settings
++	this.customSettings = this.settings.custom_settings;
++	
++	// Update the flash url if needed
++	if (!!this.settings.prevent_swf_caching) {
++		this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
++	}
++	
++	if (!this.settings.preserve_relative_urls) {
++		//this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
++		this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
++		this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
++	}
++	
++	delete this.ensureDefault;
++};
++
++// Private: loadFlash replaces the button_placeholder element with the flash movie.
++SWFUpload.prototype.loadFlash = function () {
++	var targetElement, tempParent;
++
++	// Make sure an element with the ID we are going to use doesn't already exist
++	if (document.getElementById(this.movieName) !== null) {
++		throw "ID " + this.movieName + " is already in use. The Flash Object could not be added";
++	}
++
++	// Get the element where we will be placing the flash movie
++	targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
++
++	if (targetElement == undefined) {
++		throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
++	}
++
++	// Append the container and load the flash
++	tempParent = document.createElement("div");
++	tempParent.innerHTML = this.getFlashHTML();	// Using innerHTML is non-standard but the only sensible way to dynamically add Flash in IE (and maybe other browsers)
++	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
++
++	// Fix IE Flash/Form bug
++	if (window[this.movieName] == undefined) {
++		window[this.movieName] = this.getMovieElement();
++	}
++	
++};
++
++// Private: getFlashHTML generates the object tag needed to embed the flash in to the document
++SWFUpload.prototype.getFlashHTML = function () {
++	// Flash Satay object syntax: http://www.alistapart.com/articles/flashsatay
++	return ['<object id="', this.movieName, '" type="application/x-shockwave-flash" data="', this.settings.flash_url, '" width="', this.settings.button_width, '" height="', this.settings.button_height, '" class="swfupload">',
++				'<param name="wmode" value="', this.settings.button_window_mode, '" />',
++				'<param name="movie" value="', this.settings.flash_url, '" />',
++				'<param name="quality" value="high" />',
++				'<param name="menu" value="false" />',
++				'<param name="allowScriptAccess" value="always" />',
++				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
++				'</object>'].join("");
++};
++
++// Private: getFlashVars builds the parameter string that will be passed
++// to flash in the flashvars param.
++SWFUpload.prototype.getFlashVars = function () {
++	// Build a string from the post param object
++	var paramString = this.buildParamString();
++	var httpSuccessString = this.settings.http_success.join(",");
++	
++	// Build the parameter string
++	return ["movieName=", encodeURIComponent(this.movieName),
++			"&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
++			"&amp;useQueryString=", encodeURIComponent(this.settings.use_query_string),
++			"&amp;requeueOnError=", encodeURIComponent(this.settings.requeue_on_error),
++			"&amp;httpSuccess=", encodeURIComponent(httpSuccessString),
++			"&amp;assumeSuccessTimeout=", encodeURIComponent(this.settings.assume_success_timeout),
++			"&amp;params=", encodeURIComponent(paramString),
++			"&amp;filePostName=", encodeURIComponent(this.settings.file_post_name),
++			"&amp;fileTypes=", encodeURIComponent(this.settings.file_types),
++			"&amp;fileTypesDescription=", encodeURIComponent(this.settings.file_types_description),
++			"&amp;fileSizeLimit=", encodeURIComponent(this.settings.file_size_limit),
++			"&amp;fileUploadLimit=", encodeURIComponent(this.settings.file_upload_limit),
++			"&amp;fileQueueLimit=", encodeURIComponent(this.settings.file_queue_limit),
++			"&amp;debugEnabled=", encodeURIComponent(this.settings.debug_enabled),
++			"&amp;buttonImageURL=", encodeURIComponent(this.settings.button_image_url),
++			"&amp;buttonWidth=", encodeURIComponent(this.settings.button_width),
++			"&amp;buttonHeight=", encodeURIComponent(this.settings.button_height),
++			"&amp;buttonText=", encodeURIComponent(this.settings.button_text),
++			"&amp;buttonTextTopPadding=", encodeURIComponent(this.settings.button_text_top_padding),
++			"&amp;buttonTextLeftPadding=", encodeURIComponent(this.settings.button_text_left_padding),
++			"&amp;buttonTextStyle=", encodeURIComponent(this.settings.button_text_style),
++			"&amp;buttonAction=", encodeURIComponent(this.settings.button_action),
++			"&amp;buttonDisabled=", encodeURIComponent(this.settings.button_disabled),
++			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
++		].join("");
++};
++
++// Public: getMovieElement retrieves the DOM reference to the Flash element added by SWFUpload
++// The element is cached after the first lookup
++SWFUpload.prototype.getMovieElement = function () {
++	if (this.movieElement == undefined) {
++		this.movieElement = document.getElementById(this.movieName);
++	}
++
++	if (this.movieElement === null) {
++		throw "Could not find Flash element";
++	}
++	
++	return this.movieElement;
++};
++
++// Private: buildParamString takes the name/value pairs in the post_params setting object
++// and joins them up in to a string formatted "name=value&amp;name=value"
++SWFUpload.prototype.buildParamString = function () {
++	var postParams = this.settings.post_params; 
++	var paramStringPairs = [];
++
++	if (typeof(postParams) === "object") {
++		for (var name in postParams) {
++			if (postParams.hasOwnProperty(name)) {
++				paramStringPairs.push(encodeURIComponent(name.toString()) + "=" + encodeURIComponent(postParams[name].toString()));
++			}
++		}
++	}
++
++	return paramStringPairs.join("&amp;");
++};
++
++// Public: Used to remove a SWFUpload instance from the page. This method strives to remove
++// all references to the SWF, and other objects so memory is properly freed.
++// Returns true if everything was destroyed. Returns a false if a failure occurs leaving SWFUpload in an inconsistant state.
++// Credits: Major improvements provided by steffen
++SWFUpload.prototype.destroy = function () {
++	try {
++		// Make sure Flash is done before we try to remove it
++		this.cancelUpload(null, false);
++		
++
++		// Remove the SWFUpload DOM nodes
++		var movieElement = null;
++		movieElement = this.getMovieElement();
++		
++		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
++			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
++			for (var i in movieElement) {
++				try {
++					if (typeof(movieElement[i]) === "function") {
++						movieElement[i] = null;
++					}
++				} catch (ex1) {}
++			}
++
++			// Remove the Movie Element from the page
++			try {
++				movieElement.parentNode.removeChild(movieElement);
++			} catch (ex) {}
++		}
++		
++		// Remove IE form fix reference
++		window[this.movieName] = null;
++
++		// Destroy other references
++		SWFUpload.instances[this.movieName] = null;
++		delete SWFUpload.instances[this.movieName];
++
++		this.movieElement = null;
++		this.settings = null;
++		this.customSettings = null;
++		this.eventQueue = null;
++		this.movieName = null;
++		
++		
++		return true;
++	} catch (ex2) {
++		return false;
++	}
++};
++
++
++// Public: displayDebugInfo prints out settings and configuration
++// information about this SWFUpload instance.
++// This function (and any references to it) can be deleted when placing
++// SWFUpload in production.
++SWFUpload.prototype.displayDebugInfo = function () {
++	this.debug(
++		[
++			"---SWFUpload Instance Info---\n",
++			"Version: ", SWFUpload.version, "\n",
++			"Movie Name: ", this.movieName, "\n",
++			"Settings:\n",
++			"\t", "upload_url:               ", this.settings.upload_url, "\n",
++			"\t", "flash_url:                ", this.settings.flash_url, "\n",
++			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
++			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
++			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
++			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
++			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
++			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
++			"\t", "file_types:               ", this.settings.file_types, "\n",
++			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
++			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
++			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
++			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
++			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
++
++			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
++
++			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
++			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
++			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
++			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
++			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
++			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
++			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
++			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
++			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
++			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
++			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
++
++			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
++			"Event Handlers:\n",
++			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
++			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
++			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
++			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
++			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
++			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
++			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
++			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
++			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
++			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
++		].join("")
++	);
++};
++
++/* Note: addSetting and getSetting are no longer used by SWFUpload but are included
++	the maintain v2 API compatibility
++*/
++// Public: (Deprecated) addSetting adds a setting value. If the value given is undefined or null then the default_value is used.
++SWFUpload.prototype.addSetting = function (name, value, default_value) {
++    if (value == undefined) {
++        return (this.settings[name] = default_value);
++    } else {
++        return (this.settings[name] = value);
++	}
++};
++
++// Public: (Deprecated) getSetting gets a setting. Returns an empty string if the setting was not found.
++SWFUpload.prototype.getSetting = function (name) {
++    if (this.settings[name] != undefined) {
++        return this.settings[name];
++	}
++
++    return "";
++};
++
++
++
++// Private: callFlash handles function calls made to the Flash element.
++// Calls are made with a setTimeout for some functions to work around
++// bugs in the ExternalInterface library.
++SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
++	argumentArray = argumentArray || [];
++	
++	var movieElement = this.getMovieElement();
++	var returnValue, returnString;
++
++	// Flash's method if calling ExternalInterface methods (code adapted from MooTools).
++	try {
++		returnString = movieElement.CallFunction('<invoke name="' + functionName + '" returntype="javascript">' + __flash__argumentsToXML(argumentArray, 0) + '</invoke>');
++		returnValue = eval(returnString);
++	} catch (ex) {
++		throw "Call to " + functionName + " failed";
++	}
++	
++	// Unescape file post param values
++	if (returnValue != undefined && typeof returnValue.post === "object") {
++		returnValue = this.unescapeFilePostParams(returnValue);
++	}
++
++	return returnValue;
++};
++
++/* *****************************
++	-- Flash control methods --
++	Your UI should use these
++	to operate SWFUpload
++   ***************************** */
++
++// WARNING: this function does not work in Flash Player 10
++// Public: selectFile causes a File Selection Dialog window to appear.  This
++// dialog only allows 1 file to be selected.
++SWFUpload.prototype.selectFile = function () {
++	this.callFlash("SelectFile");
++};
++
++// WARNING: this function does not work in Flash Player 10
++// Public: selectFiles causes a File Selection Dialog window to appear/ This
++// dialog allows the user to select any number of files
++// Flash Bug Warning: Flash limits the number of selectable files based on the combined length of the file names.
++// If the selection name length is too long the dialog will fail in an unpredictable manner.  There is no work-around
++// for this bug.
++SWFUpload.prototype.selectFiles = function () {
++	this.callFlash("SelectFiles");
++};
++
++
++// Public: startUpload starts uploading the first file in the queue unless
++// the optional parameter 'fileID' specifies the ID 
++SWFUpload.prototype.startUpload = function (fileID) {
++	this.callFlash("StartUpload", [fileID]);
++};
++
++// Public: cancelUpload cancels any queued file.  The fileID parameter may be the file ID or index.
++// If you do not specify a fileID the current uploading file or first file in the queue is cancelled.
++// If you do not want the uploadError event to trigger you can specify false for the triggerErrorEvent parameter.
++SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
++	if (triggerErrorEvent !== false) {
++		triggerErrorEvent = true;
++	}
++	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
++};
++
++// Public: stopUpload stops the current upload and requeues the file at the beginning of the queue.
++// If nothing is currently uploading then nothing happens.
++SWFUpload.prototype.stopUpload = function () {
++	this.callFlash("StopUpload");
++};
++
++/* ************************
++ * Settings methods
++ *   These methods change the SWFUpload settings.
++ *   SWFUpload settings should not be changed directly on the settings object
++ *   since many of the settings need to be passed to Flash in order to take
++ *   effect.
++ * *********************** */
++
++// Public: getStats gets the file statistics object.
++SWFUpload.prototype.getStats = function () {
++	return this.callFlash("GetStats");
++};
++
++// Public: setStats changes the SWFUpload statistics.  You shouldn't need to 
++// change the statistics but you can.  Changing the statistics does not
++// affect SWFUpload accept for the successful_uploads count which is used
++// by the upload_limit setting to determine how many files the user may upload.
++SWFUpload.prototype.setStats = function (statsObject) {
++	this.callFlash("SetStats", [statsObject]);
++};
++
++// Public: getFile retrieves a File object by ID or Index.  If the file is
++// not found then 'null' is returned.
++SWFUpload.prototype.getFile = function (fileID) {
++	if (typeof(fileID) === "number") {
++		return this.callFlash("GetFileByIndex", [fileID]);
++	} else {
++		return this.callFlash("GetFile", [fileID]);
++	}
++};
++
++// Public: addFileParam sets a name/value pair that will be posted with the
++// file specified by the Files ID.  If the name already exists then the
++// exiting value will be overwritten.
++SWFUpload.prototype.addFileParam = function (fileID, name, value) {
++	return this.callFlash("AddFileParam", [fileID, name, value]);
++};
++
++// Public: removeFileParam removes a previously set (by addFileParam) name/value
++// pair from the specified file.
++SWFUpload.prototype.removeFileParam = function (fileID, name) {
++	this.callFlash("RemoveFileParam", [fileID, name]);
++};
++
++// Public: setUploadUrl changes the upload_url setting.
++SWFUpload.prototype.setUploadURL = function (url) {
++	this.settings.upload_url = url.toString();
++	this.callFlash("SetUploadURL", [url]);
++};
++
++// Public: setPostParams changes the post_params setting
++SWFUpload.prototype.setPostParams = function (paramsObject) {
++	this.settings.post_params = paramsObject;
++	this.callFlash("SetPostParams", [paramsObject]);
++};
++
++// Public: addPostParam adds post name/value pair.  Each name can have only one value.
++SWFUpload.prototype.addPostParam = function (name, value) {
++	this.settings.post_params[name] = value;
++	this.callFlash("SetPostParams", [this.settings.post_params]);
++};
++
++// Public: removePostParam deletes post name/value pair.
++SWFUpload.prototype.removePostParam = function (name) {
++	delete this.settings.post_params[name];
++	this.callFlash("SetPostParams", [this.settings.post_params]);
++};
++
++// Public: setFileTypes changes the file_types setting and the file_types_description setting
++SWFUpload.prototype.setFileTypes = function (types, description) {
++	this.settings.file_types = types;
++	this.settings.file_types_description = description;
++	this.callFlash("SetFileTypes", [types, description]);
++};
++
++// Public: setFileSizeLimit changes the file_size_limit setting
++SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
++	this.settings.file_size_limit = fileSizeLimit;
++	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
++};
++
++// Public: setFileUploadLimit changes the file_upload_limit setting
++SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
++	this.settings.file_upload_limit = fileUploadLimit;
++	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
++};
++
++// Public: setFileQueueLimit changes the file_queue_limit setting
++SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
++	this.settings.file_queue_limit = fileQueueLimit;
++	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
++};
++
++// Public: setFilePostName changes the file_post_name setting
++SWFUpload.prototype.setFilePostName = function (filePostName) {
++	this.settings.file_post_name = filePostName;
++	this.callFlash("SetFilePostName", [filePostName]);
++};
++
++// Public: setUseQueryString changes the use_query_string setting
++SWFUpload.prototype.setUseQueryString = function (useQueryString) {
++	this.settings.use_query_string = useQueryString;
++	this.callFlash("SetUseQueryString", [useQueryString]);
++};
++
++// Public: setRequeueOnError changes the requeue_on_error setting
++SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
++	this.settings.requeue_on_error = requeueOnError;
++	this.callFlash("SetRequeueOnError", [requeueOnError]);
++};
++
++// Public: setHTTPSuccess changes the http_success setting
++SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
++	if (typeof http_status_codes === "string") {
++		http_status_codes = http_status_codes.replace(" ", "").split(",");
++	}
++	
++	this.settings.http_success = http_status_codes;
++	this.callFlash("SetHTTPSuccess", [http_status_codes]);
++};
++
++// Public: setHTTPSuccess changes the http_success setting
++SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
++	this.settings.assume_success_timeout = timeout_seconds;
++	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
++};
++
++// Public: setDebugEnabled changes the debug_enabled setting
++SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
++	this.settings.debug_enabled = debugEnabled;
++	this.callFlash("SetDebugEnabled", [debugEnabled]);
++};
++
++// Public: setButtonImageURL loads a button image sprite
++SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
++	if (buttonImageURL == undefined) {
++		buttonImageURL = "";
++	}
++	
++	this.settings.button_image_url = buttonImageURL;
++	this.callFlash("SetButtonImageURL", [buttonImageURL]);
++};
++
++// Public: setButtonDimensions resizes the Flash Movie and button
++SWFUpload.prototype.setButtonDimensions = function (width, height) {
++	this.settings.button_width = width;
++	this.settings.button_height = height;
++	
++	var movie = this.getMovieElement();
++	if (movie != undefined) {
++		movie.style.width = width + "px";
++		movie.style.height = height + "px";
++	}
++	
++	this.callFlash("SetButtonDimensions", [width, height]);
++};
++// Public: setButtonText Changes the text overlaid on the button
++SWFUpload.prototype.setButtonText = function (html) {
++	this.settings.button_text = html;
++	this.callFlash("SetButtonText", [html]);
++};
++// Public: setButtonTextPadding changes the top and left padding of the text overlay
++SWFUpload.prototype.setButtonTextPadding = function (left, top) {
++	this.settings.button_text_top_padding = top;
++	this.settings.button_text_left_padding = left;
++	this.callFlash("SetButtonTextPadding", [left, top]);
++};
++
++// Public: setButtonTextStyle changes the CSS used to style the HTML/Text overlaid on the button
++SWFUpload.prototype.setButtonTextStyle = function (css) {
++	this.settings.button_text_style = css;
++	this.callFlash("SetButtonTextStyle", [css]);
++};
++// Public: setButtonDisabled disables/enables the button
++SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
++	this.settings.button_disabled = isDisabled;
++	this.callFlash("SetButtonDisabled", [isDisabled]);
++};
++// Public: setButtonAction sets the action that occurs when the button is clicked
++SWFUpload.prototype.setButtonAction = function (buttonAction) {
++	this.settings.button_action = buttonAction;
++	this.callFlash("SetButtonAction", [buttonAction]);
++};
++
++// Public: setButtonCursor changes the mouse cursor displayed when hovering over the button
++SWFUpload.prototype.setButtonCursor = function (cursor) {
++	this.settings.button_cursor = cursor;
++	this.callFlash("SetButtonCursor", [cursor]);
++};
++
++/* *******************************
++	Flash Event Interfaces
++	These functions are used by Flash to trigger the various
++	events.
++	
++	All these functions a Private.
++	
++	Because the ExternalInterface library is buggy the event calls
++	are added to a queue and the queue then executed by a setTimeout.
++	This ensures that events are executed in a determinate order and that
++	the ExternalInterface bugs are avoided.
++******************************* */
++
++SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
++	// Warning: Don't call this.debug inside here or you'll create an infinite loop
++	
++	if (argumentArray == undefined) {
++		argumentArray = [];
++	} else if (!(argumentArray instanceof Array)) {
++		argumentArray = [argumentArray];
++	}
++	
++	var self = this;
++	if (typeof this.settings[handlerName] === "function") {
++		// Queue the event
++		this.eventQueue.push(function () {
++			this.settings[handlerName].apply(this, argumentArray);
++		});
++		
++		// Execute the next queued event
++		setTimeout(function () {
++			self.executeNextEvent();
++		}, 0);
++		
++	} else if (this.settings[handlerName] !== null) {
++		throw "Event handler " + handlerName + " is unknown or is not a function";
++	}
++};
++
++// Private: Causes the next event in the queue to be executed.  Since events are queued using a setTimeout
++// we must queue them in order to garentee that they are executed in order.
++SWFUpload.prototype.executeNextEvent = function () {
++	// Warning: Don't call this.debug inside here or you'll create an infinite loop
++
++	var  f = this.eventQueue ? this.eventQueue.shift() : null;
++	if (typeof(f) === "function") {
++		f.apply(this);
++	}
++};
++
++// Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
++// properties that contain characters that are not valid for JavaScript identifiers. To work around this
++// the Flash Component escapes the parameter names and we must unescape again before passing them along.
++SWFUpload.prototype.unescapeFilePostParams = function (file) {
++	var reg = /[$]([0-9a-f]{4})/i;
++	var unescapedPost = {};
++	var uk;
++
++	if (file != undefined) {
++		for (var k in file.post) {
++			if (file.post.hasOwnProperty(k)) {
++				uk = k;
++				var match;
++				while ((match = reg.exec(uk)) !== null) {
++					uk = uk.replace(match[0], String.fromCharCode(parseInt("0x" + match[1], 16)));
++				}
++				unescapedPost[uk] = file.post[k];
++			}
++		}
++
++		file.post = unescapedPost;
++	}
++
++	return file;
++};
++
++// Private: Called by Flash to see if JS can call in to Flash (test if External Interface is working)
++SWFUpload.prototype.testExternalInterface = function () {
++	try {
++		return this.callFlash("TestExternalInterface");
++	} catch (ex) {
++		return false;
++	}
++};
++
++// Private: This event is called by Flash when it has finished loading. Don't modify this.
++// Use the swfupload_loaded_handler event setting to execute custom code when SWFUpload has loaded.
++SWFUpload.prototype.flashReady = function () {
++	// Check that the movie element is loaded correctly with its ExternalInterface methods defined
++	var movieElement = this.getMovieElement();
++
++	if (!movieElement) {
++		this.debug("Flash called back ready but the flash movie can't be found.");
++		return;
++	}
++
++	this.cleanUp(movieElement);
++	
++	this.queueEvent("swfupload_loaded_handler");
++};
++
++// Private: removes Flash added fuctions to the DOM node to prevent memory leaks in IE.
++// This function is called by Flash each time the ExternalInterface functions are created.
++SWFUpload.prototype.cleanUp = function (movieElement) {
++	// Pro-actively unhook all the Flash functions
++	try {
++		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
++			this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
++			for (var key in movieElement) {
++				try {
++					if (typeof(movieElement[key]) === "function") {
++						movieElement[key] = null;
++					}
++				} catch (ex) {
++				}
++			}
++		}
++	} catch (ex1) {
++	
++	}
++
++	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
++	// it doesn't display errors.
++	window["__flash__removeCallback"] = function (instance, name) {
++		try {
++			if (instance) {
++				instance[name] = null;
++			}
++		} catch (flashEx) {
++		
++		}
++	};
++
++};
++
++
++/* This is a chance to do something before the browse window opens */
++SWFUpload.prototype.fileDialogStart = function () {
++	this.queueEvent("file_dialog_start_handler");
++};
++
++
++/* Called when a file is successfully added to the queue. */
++SWFUpload.prototype.fileQueued = function (file) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("file_queued_handler", file);
++};
++
++
++/* Handle errors that occur when an attempt to queue a file fails. */
++SWFUpload.prototype.fileQueueError = function (file, errorCode, message) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("file_queue_error_handler", [file, errorCode, message]);
++};
++
++/* Called after the file dialog has closed and the selected files have been queued.
++	You could call startUpload here if you want the queued files to begin uploading immediately. */
++SWFUpload.prototype.fileDialogComplete = function (numFilesSelected, numFilesQueued, numFilesInQueue) {
++	this.queueEvent("file_dialog_complete_handler", [numFilesSelected, numFilesQueued, numFilesInQueue]);
++};
++
++SWFUpload.prototype.uploadStart = function (file) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("return_upload_start_handler", file);
++};
++
++SWFUpload.prototype.returnUploadStart = function (file) {
++	var returnValue;
++	if (typeof this.settings.upload_start_handler === "function") {
++		file = this.unescapeFilePostParams(file);
++		returnValue = this.settings.upload_start_handler.call(this, file);
++	} else if (this.settings.upload_start_handler != undefined) {
++		throw "upload_start_handler must be a function";
++	}
++
++	// Convert undefined to true so if nothing is returned from the upload_start_handler it is
++	// interpretted as 'true'.
++	if (returnValue === undefined) {
++		returnValue = true;
++	}
++	
++	returnValue = !!returnValue;
++	
++	this.callFlash("ReturnUploadStart", [returnValue]);
++};
++
++
++
++SWFUpload.prototype.uploadProgress = function (file, bytesComplete, bytesTotal) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("upload_progress_handler", [file, bytesComplete, bytesTotal]);
++};
++
++SWFUpload.prototype.uploadError = function (file, errorCode, message) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("upload_error_handler", [file, errorCode, message]);
++};
++
++SWFUpload.prototype.uploadSuccess = function (file, serverData, responseReceived) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("upload_success_handler", [file, serverData, responseReceived]);
++};
++
++SWFUpload.prototype.uploadComplete = function (file) {
++	file = this.unescapeFilePostParams(file);
++	this.queueEvent("upload_complete_handler", file);
++};
++
++/* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
++   internal debug console.  You can override this event and have messages written where you want. */
++SWFUpload.prototype.debug = function (message) {
++	this.queueEvent("debug_handler", message);
++};
++
++
++/* **********************************
++	Debug Console
++	The debug console is a self contained, in page location
++	for debug message to be sent.  The Debug Console adds
++	itself to the body if necessary.
++
++	The console is automatically scrolled as messages appear.
++	
++	If you are using your own debug handler or when you deploy to production and
++	have debug disabled you can remove these functions to reduce the file size
++	and complexity.
++********************************** */
++   
++// Private: debugMessage is the default debug_handler.  If you want to print debug messages
++// call the debug() function.  When overriding the function your own function should
++// check to see if the debug setting is true before outputting debug information.
++SWFUpload.prototype.debugMessage = function (message) {
++	if (this.settings.debug) {
++		var exceptionMessage, exceptionValues = [];
++
++		// Check for an exception object and print it nicely
++		if (typeof message === "object" && typeof message.name === "string" && typeof message.message === "string") {
++			for (var key in message) {
++				if (message.hasOwnProperty(key)) {
++					exceptionValues.push(key + ": " + message[key]);
++				}
++			}
++			exceptionMessage = exceptionValues.join("\n") || "";
++			exceptionValues = exceptionMessage.split("\n");
++			exceptionMessage = "EXCEPTION: " + exceptionValues.join("\nEXCEPTION: ");
++			SWFUpload.Console.writeLine(exceptionMessage);
++		} else {
++			SWFUpload.Console.writeLine(message);
++		}
++	}
++};
++
++SWFUpload.Console = {};
++SWFUpload.Console.writeLine = function (message) {
++	var console, documentForm;
++
++	try {
++		console = document.getElementById("SWFUpload_Console");
++
++		if (!console) {
++			documentForm = document.createElement("form");
++			document.getElementsByTagName("body")[0].appendChild(documentForm);
++
++			console = document.createElement("textarea");
++			console.id = "SWFUpload_Console";
++			console.style.fontFamily = "monospace";
++			console.setAttribute("wrap", "off");
++			console.wrap = "off";
++			console.style.overflow = "auto";
++			console.style.width = "700px";
++			console.style.height = "350px";
++			console.style.margin = "5px";
++			documentForm.appendChild(console);
++		}
++
++		console.value += message + "\n";
++
++		console.scrollTop = console.scrollHeight - console.clientHeight;
++	} catch (ex) {
++		alert("Exception: " + ex.name + " Message: " + ex.message);
++	}
++};
+diff --git a/image_fupload/swfupload/swfupload.queue.js b/image_fupload/swfupload/swfupload.queue.js
+new file mode 100644
+index 0000000..69e619d
+--- /dev/null
++++ b/image_fupload/swfupload/swfupload.queue.js
+@@ -0,0 +1,98 @@
++/*
++	Queue Plug-in
++	
++	Features:
++		*Adds a cancelQueue() method for cancelling the entire queue.
++		*All queued files are uploaded when startUpload() is called.
++		*If false is returned from uploadComplete then the queue upload is stopped.
++		 If false is not returned (strict comparison) then the queue upload is continued.
++		*Adds a QueueComplete event that is fired when all the queued files have finished uploading.
++		 Set the event handler with the queue_complete_handler setting.
++		
++	*/
++
++var SWFUpload;
++if (typeof(SWFUpload) === "function") {
++	SWFUpload.queue = {};
++	
++	SWFUpload.prototype.initSettings = (function (oldInitSettings) {
++		return function () {
++			if (typeof(oldInitSettings) === "function") {
++				oldInitSettings.call(this);
++			}
++			
++			this.queueSettings = {};
++			
++			this.queueSettings.queue_cancelled_flag = false;
++			this.queueSettings.queue_upload_count = 0;
++			
++			this.queueSettings.user_upload_complete_handler = this.settings.upload_complete_handler;
++			this.queueSettings.user_upload_start_handler = this.settings.upload_start_handler;
++			this.settings.upload_complete_handler = SWFUpload.queue.uploadCompleteHandler;
++			this.settings.upload_start_handler = SWFUpload.queue.uploadStartHandler;
++			
++			this.settings.queue_complete_handler = this.settings.queue_complete_handler || null;
++		};
++	})(SWFUpload.prototype.initSettings);
++
++	SWFUpload.prototype.startUpload = function (fileID) {
++		this.queueSettings.queue_cancelled_flag = false;
++		this.callFlash("StartUpload", [fileID]);
++	};
++
++	SWFUpload.prototype.cancelQueue = function () {
++		this.queueSettings.queue_cancelled_flag = true;
++		this.stopUpload();
++		
++		var stats = this.getStats();
++		while (stats.files_queued > 0) {
++			this.cancelUpload();
++			stats = this.getStats();
++		}
++	};
++	
++	SWFUpload.queue.uploadStartHandler = function (file) {
++		var returnValue;
++		if (typeof(this.queueSettings.user_upload_start_handler) === "function") {
++			returnValue = this.queueSettings.user_upload_start_handler.call(this, file);
++		}
++		
++		// To prevent upload a real "FALSE" value must be returned, otherwise default to a real "TRUE" value.
++		returnValue = (returnValue === false) ? false : true;
++		
++		this.queueSettings.queue_cancelled_flag = !returnValue;
++
++		return returnValue;
++	};
++	
++	SWFUpload.queue.uploadCompleteHandler = function (file) {
++		var user_upload_complete_handler = this.queueSettings.user_upload_complete_handler;
++		var continueUpload;
++		
++		if (file.filestatus === SWFUpload.FILE_STATUS.COMPLETE) {
++			this.queueSettings.queue_upload_count++;
++		}
++
++		if (typeof(user_upload_complete_handler) === "function") {
++			continueUpload = (user_upload_complete_handler.call(this, file) === false) ? false : true;
++		} else if (file.filestatus === SWFUpload.FILE_STATUS.QUEUED) {
++			// If the file was stopped and re-queued don't restart the upload
++			continueUpload = false;
++		} else {
++			continueUpload = true;
++		}
++		
++		if (continueUpload) {
++			var stats = this.getStats();
++			if (stats.files_queued > 0 && this.queueSettings.queue_cancelled_flag === false) {
++				this.startUpload();
++			} else if (this.queueSettings.queue_cancelled_flag === false) {
++				this.queueEvent("queue_complete_handler", [this.queueSettings.queue_upload_count]);
++				this.queueSettings.queue_upload_count = 0;
++			} else {
++				this.queueSettings.queue_cancelled_flag = false;
++				this.queueSettings.queue_upload_count = 0;
++			}
++		}
++	};
++}
+\ No newline at end of file
+diff --git a/image_fupload/swfupload/swfupload.swf b/image_fupload/swfupload/swfupload.swf
+new file mode 100644
+index 0000000000000000000000000000000000000000..e3f767031ca8243a5f0b89bc0f154cc5962e01e9
+GIT binary patch
+literal 12787
+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
+FQw=c6g4F;3
+
+literal 0
+HcmV?d00001
+
+-- 
+1.7.4.msysgit.0
+
