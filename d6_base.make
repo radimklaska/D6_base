@@ -31,59 +31,29 @@ projects[drupal][version] = 6
 
 ; Specific versions and other unusual stuff
 
-; version
-projects[imageinfo_cache][type] = module
-projects[imageinfo_cache][download][type] = file
-projects[imageinfo_cache][download][url] = http://ftp.drupal.org/files/projects/imageinfo_cache-6.x-1.x-dev.tar.gz
-
-; version
-projects[private_upload][type] = module
-projects[private_upload][download][type] = file
-projects[private_upload][download][url] = http://ftp.drupal.org/files/projects/private_upload-6.x-1.0-rc3.tar.gz
-
-; version
-projects[variable_clean][type] = module
-projects[variable_clean][download][type] = file
-projects[variable_clean][download][url] = http://ftp.drupal.org/files/projects/variable_clean-6.x-1.x-dev.tar.gz
-
-; patch
+; There is SA-CONTRIB-2011-004 http://drupal.org/node/1048906 but it's not that bad in my case...
 projects[og_forum][type] = module
 projects[og_forum][download][type] = file
 projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz
 
-; version
-projects[glossary][type] = module
-projects[glossary][download][type] = file
-projects[glossary][download][url] = http://ftp.drupal.org/files/projects/glossary-6.x-1.6.tar.gz
 
 
-  
-; Common modules
+; Modules
+projects[] = advagg
 projects[] = acl
 projects[] = addtoany
-projects[] = admin
 projects[] = admin_menu
 projects[] = admin_theme
 projects[] = adminrole
 projects[] = advanced_help
-projects[] = apachesolr
 projects[] = auto_nodetitle
 projects[] = autocomplete_widgets
 projects[] = backup_migrate
-projects[] = better_formats
+projects[] = backup_migrate_files
 projects[] = block_class
-projects[] = blockcache_alter
-projects[] = boost
-projects[] = cache
 projects[] = calendar
 projects[] = cck
-projects[] = colorbox
-projects[] = colorpicker
-projects[] = cck_autocomplete
-projects[] = comment_notify
-projects[] = config_perms
 projects[] = contemplate
-projects[] = context
 projects[] = contextual
 projects[] = css_emimage
 projects[] = css_injector
@@ -95,11 +65,14 @@ projects[] = devel
 projects[] = devel_themer
 projects[] = dhtml_menu
 projects[] = diff
+projects[] = disclaimer
 projects[] = ds
-projects[] = email
 projects[] = emfield
+projects[] = expire
 projects[] = extlink
 projects[] = faq
+projects[] = fb
+projects[] = fb_social
 projects[] = fbconnect
 projects[] = features
 projects[] = feedapi
@@ -110,25 +83,25 @@ projects[] = feeds
 projects[] = feeds_imagegrabber
 projects[] = feeds_xpathparser
 projects[] = filefield
-projects[] = filefield_nginx_progress
-projects[] = filefield_sources
 projects[] = filter_perms
 projects[] = fivestar
 projects[] = flag
-projects[] = force_password_change
 projects[] = formblock
 projects[] = forum_access
 projects[] = fpa
 projects[] = geshifilter
 projects[] = globalredirect
+projects[] = glossary
 projects[] = gmap
 projects[] = google_analytics
+projects[] = google_plusone
 projects[] = hovertip
 projects[] = chart
 projects[] = image_fupload
 projects[] = imageapi
 projects[] = imagecache
 projects[] = imagecache_actions
+projects[] = imagecache_external
 projects[] = imagefield
 projects[] = imagefield_import
 projects[] = imce
@@ -139,8 +112,6 @@ projects[] = job_scheduler
 projects[] = jquery_ui
 projects[] = jquery_update
 projects[] = l10n_client
-projects[] = l10n_update
-projects[] = libraries
 projects[] = lightbox2
 projects[] = link
 projects[] = linkimagefield
@@ -148,12 +119,13 @@ projects[] = location
 projects[] = login_security
 projects[] = logintoboggan
 projects[] = media_vimeo
+projects[] = menu_item_container
 projects[] = messaging
 projects[] = module_grants
 projects[] = mollom
 projects[] = nd
-projects[] = nd_contrib
 projects[] = nginx_accel_redirect
+projects[] = nice_menus
 projects[] = node_access
 projects[] = node_limitnumber
 projects[] = nodelocation_relationship
@@ -167,24 +139,20 @@ projects[] = og
 projects[] = panels
 projects[] = pathauto
 projects[] = phone
+projects[] = print
+projects[] = private_upload
 projects[] = privatemsg
+projects[] = purge
 projects[] = quicktabs
 projects[] = rate
-projects[] = readonlymode
-projects[] = reroute_email
 projects[] = revisioning
-projects[] = robotstxt
 projects[] = rules
 projects[] = search404
-projects[] = seckit
-projects[] = securesite
 projects[] = security_review
 projects[] = semanticviews
-projects[] = seo_checklist
 projects[] = session_expire
 projects[] = sexybookmarks
 projects[] = shorten
-projects[] = shorturl
 projects[] = shoutbox
 projects[] = shurly
 projects[] = scheduler
@@ -193,20 +161,19 @@ projects[] = signup_status
 projects[] = site_verify
 projects[] = skinr
 projects[] = spaces
-projects[] = special_menu_items
-projects[] = stringoverrides
 projects[] = switchtheme
 projects[] = tagadelic
 projects[] = taxonomy_manager
 projects[] = taxonomy_menu
 projects[] = taxonomy_super_select
+projects[] = thickbox
+projects[] = tinybrowser
+projects[] = tinymce
 projects[] = token
 projects[] = transliteration
 projects[] = tweetbutton
 projects[] = twitter
-projects[] = ubercart
 projects[] = uc_advanced_catalog
-projects[] = uc_custom_price
 projects[] = uc_discounts_alt
 projects[] = uc_pma
 projects[] = uc_product_power_tools
@@ -218,14 +185,13 @@ projects[] = views
 projects[] = views_attach
 projects[] = views_bonus
 projects[] = views_bulk_operations
-projects[] = views_content_cache
+projects[] = views_customfield
 projects[] = views_cycle
 projects[] = views_rotator
 projects[] = views_showcase
 projects[] = views_slideshow
 projects[] = views_slideshow_ddblock
 projects[] = views_slideshow_imageflow
-projects[] = views404
 projects[] = votingapi
 projects[] = webform
 projects[] = websnapr_field
@@ -236,11 +202,15 @@ projects[] = xmlsitemap
 
 
 
+
+
+
 ; Themes
 ; --------
 projects[] = acquia_prosper
 projects[] = fusion
 projects[] = ninesixty
+projects[] = omega
 projects[] = rootcandy
 
 
@@ -249,11 +219,26 @@ projects[] = rootcandy
 libraries[jquery][download][type] = "file"
 libraries[jquery][download][url] = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"
 
-libraries[jqueryui][download][type] = "file"
-libraries[jqueryui][download][url] = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"
+libraries[jquery_ui][download][type] = "get"
+libraries[jquery_ui][destination] = "modules/contrib/jquery_ui"
+libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
+libraries[jquery_ui][directory_name] = "jquery.ui"
 
 libraries[jwysiwyg][download][type] = "file"
-libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"
+libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"libraries[getid3][download][type] = "get"
+
+projects[getid3_lib][type] = library
+projects[getid3_lib][download][type] = get
+projects[getid3_lib][download][url] = http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip
+projects[getid3_lib][directory_name] = getid3
+
+libraries[facebook-php-sdk][download][type] = "get"
+libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/php-sdk/zipball/v3.1.1"
+libraries[facebook-php-sdk][destination] = "libraries"
+
+projects[geshi][type] = library
+projects[geshi][download][type] = svn
+projects[geshi][download][url] = https://geshi.svn.sourceforge.net/svnroot/geshi/tags/RELEASE_1_0_8_10/geshi-1.0.X/src/
 
 
 
@@ -284,9 +269,11 @@ libraries[yui][download][type] = "file"
 libraries[yui][download][url] = "https://raw.github.com/yui/yui2/master/build/yuiloader-dom-event/yuiloader-dom-event.js"
 libraries[yui][destination] = "libraries/yui/build/yahoo-dom-event"
 
-libraries[ckeditor][download][type] = "file"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.1/ckeditor_3.6.1.tar.gz"
+libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][destination] = "libraries"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.2/ckeditor_3.6.2.tar.gz"
+libraries[ckeditor][directory_name] = "ckeditor"
+libraries[ckeditor][patch][] = "http://drupal.org/files/1337004-ckeditor-remove-samples-3.patch"
 
 libraries[openwysiwyg][download][type] = "file"
 libraries[openwysiwyg][download][url] = "http://www.openwebware.com/openwysiwyg_v1.4.7.zip"
