@@ -121,6 +121,7 @@ projects[] = logintoboggan
 projects[] = media_vimeo
 projects[] = menu_item_container
 projects[] = messaging
+projects[] = module_filter
 projects[] = module_grants
 projects[] = mollom
 projects[] = nd
