@@ -64,7 +64,6 @@ projects[] = google_analytics
 projects[] = google_plusone
 projects[] = hovertip
 projects[] = chart
-projects[] = image_fupload
 projects[] = imageapi
 projects[] = imagecache
 projects[] = imagecache_actions
