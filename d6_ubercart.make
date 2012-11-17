@@ -23,3 +23,7 @@ includes[shared] = "https://raw.github.com/radimklaska/D6_base/master/sub_shared
 
 ; Libraries
 includes[libraries] = "https://raw.github.com/radimklaska/D6_base/master/sub_libraries.make"
+
+
+; Ubercart related modules
+includes[ubercart] = "https://raw.github.com/radimklaska/D6_base/master/sub_ubercart.make"
