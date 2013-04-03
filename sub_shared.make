@@ -1,42 +1,48 @@
-; Specific versions and other unusual stuff
-
-; WARNING! There is SA-CONTRIB-2011-004 http://drupal.org/node/1048906
-projects[og_forum][type] = module
-projects[og_forum][download][type] = file
-projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz
-
 ; Modules
-projects[] = advagg
 projects[] = acl
+projects[] = addanother
 projects[] = addtoany
+projects[] = adminrole
 projects[] = admin_menu
 projects[] = admin_theme
-projects[] = adminrole
+projects[] = advagg
 projects[] = advanced_help
-projects[] = auto_nodetitle
+projects[] = ahah_helper
+projects[] = apachesolr
 projects[] = autocomplete_widgets
+projects[] = autoload
+projects[] = auto_nodetitle
 projects[] = backup_migrate_files
 projects[] = block_class
+projects[] = cache
 projects[] = calendar
 projects[] = cck
+projects[] = cck_autocomplete
+projects[] = chart
+projects[] = colorpicker
+projects[] = comment_notify
 projects[] = contemplate
+projects[] = context
 projects[] = contextual
 projects[] = css_injector
 projects[] = ctools
 projects[] = curlypage
 projects[] = date
+projects[] = date_repeat_presets
 projects[] = devel
 projects[] = devel_themer
 projects[] = dhtml_menu
 projects[] = diff
 projects[] = disclaimer
 projects[] = ds
+projects[] = email
 projects[] = emfield
+projects[] = expire
 projects[] = extlink
 projects[] = faq
 projects[] = fb
-projects[] = fb_social
 projects[] = fbconnect
+projects[] = fb_social
 projects[] = features
 projects[] = feedapi
 projects[] = feedapi_mapper
@@ -46,9 +52,11 @@ projects[] = feeds
 projects[] = feeds_imagegrabber
 projects[] = feeds_xpathparser
 projects[] = filefield
+projects[] = filefield_sources
 projects[] = filter_perms
 projects[] = fivestar
 projects[] = flag
+projects[] = force_password_change
 projects[] = formblock
 projects[] = forum_access
 projects[] = geshifilter
@@ -58,21 +66,24 @@ projects[] = gmap
 projects[] = google_analytics
 projects[] = google_plusone
 projects[] = hovertip
-projects[] = chart
 projects[] = imageapi
 projects[] = imagecache
 projects[] = imagecache_actions
 projects[] = imagecache_external
 projects[] = imagefield
 projects[] = imagefield_import
+projects[] = imageinfo_cache
 projects[] = imce
 projects[] = imce_wysiwyg
 projects[] = insert
 projects[] = insert_view
+projects[] = invoice
 projects[] = job_scheduler
 projects[] = jquery_ui
 projects[] = jquery_update
 projects[] = l10n_client
+projects[] = l10n_update
+projects[] = libraries
 projects[] = lightbox2
 projects[] = link
 projects[] = linkimagefield
@@ -85,20 +96,25 @@ projects[] = module_filter
 projects[] = module_grants
 projects[] = mollom
 projects[] = nd
+projects[] = nd_contrib
 projects[] = nginx_accel_redirect
 projects[] = nice_menus
-projects[] = node_access
-projects[] = node_limitnumber
 projects[] = nodelocation_relationship
 projects[] = nodereference_url
 projects[] = nodereferrer
 projects[] = nodewords
+projects[] = node_access
+projects[] = node_clone
+projects[] = node_limitnumber
 projects[] = notifications
 projects[] = notifications_extra
 projects[] = notifications_team
+projects[] = oauth
 projects[] = og
 projects[] = panels
 projects[] = pathauto
+projects[] = path_access
+projects[] = path_redirect
 projects[] = phone
 projects[] = print
 projects[] = privatemsg
@@ -106,10 +122,13 @@ projects[] = purge
 projects[] = quicktabs
 projects[] = rate
 projects[] = revisioning
+projects[] = role_expire
 projects[] = rules
 projects[] = search404
+projects[] = seckit
 projects[] = security_review
 projects[] = semanticviews
+projects[] = seo_checklist
 projects[] = session_expire
 projects[] = sexybookmarks
 projects[] = shorten
@@ -120,6 +139,8 @@ projects[] = signup
 projects[] = signup_status
 projects[] = skinr
 projects[] = spaces
+projects[] = special_menu_items
+projects[] = stringoverrides
 projects[] = switchtheme
 projects[] = tagadelic
 projects[] = taxonomy_manager
@@ -143,7 +164,6 @@ projects[] = views_customfield
 projects[] = views_cycle
 projects[] = views_rotator
 projects[] = views_showcase
-projects[] = views_slideshow
 projects[] = views_slideshow_ddblock
 projects[] = views_slideshow_imageflow
 projects[] = votingapi
@@ -155,7 +175,6 @@ projects[] = wysiwyg
 projects[] = xmlsitemap
 
 
-
 ; Themes
 ; --------
 projects[] = acquia_prosper
@@ -163,3 +182,14 @@ projects[] = fusion
 projects[] = ninesixty
 projects[] = omega
 projects[] = rootcandy
+
+
+; Specific versions and other unusual stuff
+
+; views_slideshow_ddblock need 2.x version
+projects[views_slideshow][version] = 2.4
+
+; There is SA-CONTRIB-2011-004 http://drupal.org/node/1048906 but it's not that bad in my case...
+projects[og_forum][type] = module
+projects[og_forum][download][type] = file
+projects[og_forum][download][url] = http://ftp.drupal.org/files/projects/og_forum-6.x-2.2.tar.gz

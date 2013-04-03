@@ -1,4 +1,3 @@
-
 ; Libraries
 ; ---------
 libraries[jquery][download][type] = "file"
@@ -7,28 +6,41 @@ libraries[jquery][download][url] = "https://ajax.googleapis.com/ajax/libs/jquery
 libraries[jqueryui][download][type] = "file"
 libraries[jqueryui][download][url] = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"
 
-projects[getid3_lib][type] = library
-projects[getid3_lib][download][type] = get
-projects[getid3_lib][download][url] = http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip
-projects[getid3_lib][directory_name] = getid3
+libraries[colorbox][download][type] = "git"
+libraries[colorbox][download][url] = "git://github.com/jackmoore/colorbox.git"
+libraries[colorbox][directory_name] = "colorbox"
+libraries[colorbox][destination] = "libraries"
 
-libraries[facebook-php-sdk][download][type] = "get"
-libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/php-sdk/zipball/v3.1.1"
-libraries[facebook-php-sdk][destination] = "libraries"
+libraries[oauth2-server-php][download][type] = "git"
+libraries[oauth2-server-php][download][url] = "git://github.com/bshaffer/oauth2-server-php.git"
+libraries[oauth2-server-php][directory_name] = "oauth2-server-php"
+libraries[oauth2-server-php][destination] = "libraries"
 
-projects[geshi][type] = library
-projects[geshi][download][type] = svn
-projects[geshi][download][url] = https://geshi.svn.sourceforge.net/svnroot/geshi/tags/RELEASE_1_0_8_10/geshi-1.0.X/src/     
+libraries[jqprint][download][type] = "git"
+libraries[jqprint][download][url] = "git://github.com/rbayliss/jquery.jqprint.git"
+libraries[jqprint][directory_name] = "jqprint"
+libraries[jqprint][destination] = "libraries"
 
-libraries[colorbox][type] = library
-libraries[colorbox][download][type] = "file"
-libraries[colorbox][download][url] = http://www.jacklmoore.com/colorbox/colorbox.zip
+libraries[turn.js][download][type] = "git"
+libraries[turn.js][download][url] = "git://github.com/blasten/turn.js.git"
+libraries[turn.js][directory_name] = "turn.js"
+libraries[turn.js][destination] = "libraries"
 
-libraries[jwysiwyg][download][type] = "file"
-libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"
+libraries[gitter][download][type] = "git"
+libraries[gitter][download][url] = "git://github.com/skwashd/gitter.git"
+libraries[gitter][destination] = "libraries"
+
+projects[geshi][type] = "library"
+projects[geshi][download][type] = "svn"
+projects[geshi][download][url] = "https://geshi.svn.sourceforge.net/svnroot/geshi/tags/RELEASE_1_0_8_10/geshi-1.0.X/src/"
 
 libraries[jquery.cycle][download][type] = "file"
 libraries[jquery.cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
+
+libraries[cloud-zoom][download][type] = "file"
+libraries[cloud-zoom][download][url] = "http://www.professorcloud.com/downloads/cloud-zoom.1.0.3.zip"
+libraries[cloud-zoom][directory_name] = "cloud-zoom"
+libraries[cloud-zoom][destination] = "libraries"
 
 libraries[autopager][download][type] = "file"
 libraries[autopager][download][url] = "http://jquery-autopager.googlecode.com/files/jquery.autopager-1.0.0.js"
@@ -45,40 +57,16 @@ libraries[lessphp][download][type] = "git"
 libraries[lessphp][download][url] = "git://github.com/leafo/lessphp.git"
 libraries[lessphp][destination] = "libraries"
 
-libraries[jwysiwyg][download][type] = "file"
-libraries[jwysiwyg][download][url] = "http://jwysiwyg.googlecode.com/svn/tags/0.6/jwysiwyg/jquery.wysiwyg.js"
-libraries[jwysiwyg][destination] = "libraries"
-
-libraries[markitup][download][type] = "file"
-libraries[markitup][download][url] = "https://raw.github.com/markitup/1.x/master/markitup/jquery.markitup.js"
-libraries[markitup][destination] = "libraries/markitup" 
-
-libraries[fckeditor][download][type] = "file"
-libraries[fckeditor][download][url] = "http://sourceforge.net/project/downloading.php?group_id=75348&filename=FCKeditor_2.6.6.tar.gz"
-libraries[fckeditor][destination] = "libraries"
-
-libraries[whizzywig][download][type] = "file"
-libraries[whizzywig][download][url] = "http://whizzywig.googlecode.com/files/whizzywig63.js"
-libraries[whizzywig][destination] = "libraries" 
-
-;I don't know how to download this thing. Maybe you know... ;-)
-;libraries[nicedit][download][type] = "file"
-;libraries[nicedit][download][url] = "http://nicedit.com/download.php/?WHATCANIDO?/nicEdit.js"
-;libraries[nicedit][download][url] = "http://nicedit.com/dl.php/?WHATCANIDO?/nicEdit.js"
-;libraries[nicedit][destination] = "libraries"
-
-libraries[yui][download][type] = "file"
-libraries[yui][download][url] = "https://raw.github.com/yui/yui2/master/build/yuiloader-dom-event/yuiloader-dom-event.js"
-libraries[yui][destination] = "libraries/yui/build/yahoo-dom-event"
-
+; Waiting with update to version 4 until http://drupal.org/node/1853550
 libraries[ckeditor][download][type] = "file"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.1/ckeditor_3.6.1.tar.gz"
 libraries[ckeditor][destination] = "libraries"
 
-libraries[openwysiwyg][download][type] = "file"
-libraries[openwysiwyg][download][url] = "http://www.openwebware.com/openwysiwyg_v1.4.7.zip"
-libraries[openwysiwyg][destination] = "libraries"
+projects[getid3_lib][type] = library
+projects[getid3_lib][download][type] = get
+projects[getid3_lib][download][url] = http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip
+projects[getid3_lib][directory_name] = getid3
 
-libraries[wymeditor][download][type] = "file"
-libraries[wymeditor][download][url] = "http://www.wymeditor.org/download/file.php?f=wymeditor-0.5-rc-2.tar.gz"
-libraries[wymeditor][destination] = "libraries"
+libraries[facebook-php-sdk][download][type] = "get"
+libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/php-sdk/zipball/v3.1.1"
+libraries[facebook-php-sdk][destination] = "libraries"
