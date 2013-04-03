@@ -172,7 +172,6 @@ projects[] = views_customfield
 projects[] = views_cycle
 projects[] = views_rotator
 projects[] = views_showcase
-projects[] = views_slideshow
 projects[] = views_slideshow_ddblock
 projects[] = views_slideshow_imageflow
 projects[] = votingapi
@@ -194,6 +193,9 @@ projects[] = rootcandy
 
 
 ; Specific versions and other unusual stuff
+
+; views_slideshow_ddblock need 2.x version
+projects[views_slideshow][version] = 2.4
 
 ; There is SA-CONTRIB-2011-004 http://drupal.org/node/1048906 but it's not that bad in my case...
 projects[og_forum][type] = module
