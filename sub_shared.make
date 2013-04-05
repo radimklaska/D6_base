@@ -137,7 +137,6 @@ projects[] = sexybookmarks
 projects[] = shorten
 projects[] = shoutbox
 projects[] = shurly
-projects[] = scheduler
 projects[] = signup
 projects[] = signup_status
 projects[] = skinr
