@@ -194,9 +194,3 @@ projects[] = fusion
 projects[] = ninesixty
 projects[] = omega
 projects[] = rootcandy
-
-
-; Specific versions and other unusual stuff
-
-; views_slideshow_ddblock need 2.x version
-projects[views_slideshow][version] = 2.4
