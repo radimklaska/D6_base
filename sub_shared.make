@@ -3,7 +3,6 @@ projects[] = acl
 projects[] = addanother
 projects[] = addtoany
 projects[] = adminrole
-projects[] = admin_hover
 projects[] = admin_menu
 projects[] = admin_theme
 projects[] = advagg
