@@ -122,7 +122,6 @@ projects[] = privatemsg
 projects[] = purge
 projects[] = quicktabs
 projects[] = rate
-projects[] = responsive_images
 projects[] = revisioning
 projects[] = role_expire
 projects[] = rules
