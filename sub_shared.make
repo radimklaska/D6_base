@@ -115,7 +115,6 @@ projects[] = panels
 projects[] = pathauto
 projects[] = path_access
 projects[] = path_redirect
-projects[] = pbc
 projects[] = phone
 projects[] = print
 projects[] = privatemsg
