@@ -1,4 +1,13 @@
 ; Modules
+
+; Specific versions and other unusual stuff
+; --------
+; We need 2.4 because 3.x is not compatible with views 2
+projects[views_slideshow][version] = 2.4
+
+
+; Common modules
+; --------
 projects[] = acl
 projects[] = addanother
 projects[] = addtoany
@@ -166,7 +175,6 @@ projects[] = views_customfield
 projects[] = views_cycle
 projects[] = views_rotator
 projects[] = views_showcase
-projects[] = views_slideshow
 projects[] = views_slideshow_ddblock
 projects[] = views_slideshow_imageflow
 projects[] = votingapi
