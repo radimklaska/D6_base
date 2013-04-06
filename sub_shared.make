@@ -5,6 +5,9 @@
 ; We need 2.4 because 3.x is not compatible with views 2
 projects[views_slideshow][version] = 2.4
 
+; jQuery_ui is unable to detect installed version of JQuery UI 1.8+ because version.txt does not exist (patch attached) http://drupal.org/node/1954136#comment-7225612
+projects[jquery_ui][patch][] = "http://drupal.org/files/1954136-3-jquery_ui_version_not_detected.patch"
+
 
 ; Common modules
 ; --------
@@ -89,7 +92,6 @@ projects[] = insert
 projects[] = insert_view
 projects[] = invoice
 projects[] = job_scheduler
-projects[] = jquery_ui
 projects[] = jquery_update
 projects[] = l10n_client
 projects[] = l10n_update
