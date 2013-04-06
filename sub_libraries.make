@@ -1,10 +1,10 @@
 ; Libraries
 ; ---------
 libraries[jquery][download][type] = "file"
-libraries[jquery][download][url] = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"
+libraries[jquery][download][url] = "http://code.jquery.com/jquery-1.9.1.min.js"
 
 libraries[jqueryui][download][type] = "get"
-libraries[jqueryui][download][url]  = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
+libraries[jqueryui][download][url]  = "http://jqueryui.com/resources/download/jquery-ui-1.10.2.zip"
 libraries[jqueryui][directory_name] = "jquery.ui"
 
 libraries[colorbox][download][type] = "git"
