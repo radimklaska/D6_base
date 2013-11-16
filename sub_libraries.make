@@ -69,5 +69,5 @@ projects[getid3_lib][download][url] = http://downloads.sourceforge.net/project/g
 projects[getid3_lib][directory_name] = getid3
 
 libraries[facebook-php-sdk][download][type] = "get"
-libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/php-sdk/zipball/v3.1.1"
+libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/facebook-php-sdk/zipball/v3.1.1"
 libraries[facebook-php-sdk][destination] = "libraries"
