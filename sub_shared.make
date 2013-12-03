@@ -195,3 +195,4 @@ projects[] = fusion
 projects[] = ninesixty
 projects[] = omega
 projects[] = rootcandy
+projects[] = polpo
