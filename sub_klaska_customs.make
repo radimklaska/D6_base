@@ -1,4 +1,8 @@
-; Custom modules
+; --------
+; Generic custom modules
+; --------
+
+; Modules
 ; --------
 
 ; Image_fupload fork, see readme https://github.com/radimklaska/image_fupload
@@ -13,3 +17,16 @@ projects[og_forum][type] = module
 projects[og_forum][download][type] = git
 projects[og_forum][download][url] = "git@github.com:radimklaska/og_forum.git"
 projects[og_forum][subdir] = custom
+
+
+; --------
+; Project specific stuff
+; --------
+
+; Themes
+; --------
+
+projects[saveidcom_theme][type] = theme
+projects[saveidcom_theme][download][type] = git
+projects[saveidcom_theme][download][url] = "git@bitbucket.org:radimklaska/saveidcom_theme.git"
+projects[saveidcom_theme][subdir] = custom

@@ -7,6 +7,11 @@ libraries[jqueryui][download][type] = "get"
 libraries[jqueryui][download][url]  = "http://jqueryui.com/resources/download/jquery-ui-1.10.2.zip"
 libraries[jqueryui][directory_name] = "jquery.ui"
 
+libraries[elfinder][download][type] = "get"
+libraries[elfinder][download][url]  = "https://github.com/Studio-42/elFinder/archive/1.2.zip"
+libraries[elfinder][directory_name] = "elfinder"
+libraries[elfinder][destination] = "libraries"
+
 libraries[colorbox][download][type] = "git"
 libraries[colorbox][download][url] = "git://github.com/jackmoore/colorbox.git"
 libraries[colorbox][directory_name] = "colorbox"
@@ -26,6 +31,11 @@ libraries[turn.js][download][type] = "git"
 libraries[turn.js][download][url] = "git://github.com/blasten/turn.js.git"
 libraries[turn.js][directory_name] = "turn.js"
 libraries[turn.js][destination] = "libraries"
+
+libraries[tinymce][download][type] = "get"
+libraries[tinymce][download][url]  = "https://github.com/tinymce/tinymce/archive/3.5.10.zip"
+libraries[tinymce][directory_name] = "tinymce"
+libraries[tinymce][destination] = "libraries"
 
 libraries[gitter][download][type] = "git"
 libraries[gitter][download][url] = "git://github.com/skwashd/gitter.git"
