@@ -5,6 +5,8 @@
 projects[uc_advanced_catalog][version] = 2.x-dev
 projects[uc_advanced_catalog][patch][] = "http://drupal.org/files/function_ereg_is_deprecated_1853048_1.patch"
 
+; 1.4 version has bug in .install see: https://drupal.org/node/438714#comment-1907078
+projects[uc_option_image][version] = 6.x-1.x-dev
 
 ; Common modules
 ; --------
