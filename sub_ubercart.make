@@ -17,7 +17,6 @@ projects[] = uc_extra_fields_pane
 projects[] = uc_free_order
 projects[] = uc_gopay
 projects[] = uc_checkout_tweaks
-projects[] = uc_option_image
 projects[] = uc_pma
 projects[] = uc_product_power_tools
 projects[] = uc_product_quote
