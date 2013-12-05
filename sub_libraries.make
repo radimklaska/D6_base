@@ -53,6 +53,11 @@ libraries[cloud-zoom][download][url] = "http://www.professorcloud.com/downloads/
 libraries[cloud-zoom][directory_name] = "cloud-zoom"
 libraries[cloud-zoom][destination] = "libraries"
 
+libraries[cufon-fonts][download][type] = "file"
+libraries[cufon-fonts][download][url] = "http://cufon.shoqolate.com/js/cufon-yui.js"
+libraries[cufon-fonts][directory_name] = "cufon-fonts"
+libraries[cufon-fonts][destination] = "libraries"
+
 libraries[autopager][download][type] = "file"
 libraries[autopager][download][url] = "http://jquery-autopager.googlecode.com/files/jquery.autopager-1.0.0.js"
 
