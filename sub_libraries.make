@@ -4,7 +4,7 @@ libraries[jquery][download][type] = "file"
 libraries[jquery][download][url] = "http://code.jquery.com/jquery-1.9.1.min.js"
 
 libraries[jqueryui][download][type] = "get"
-libraries[jqueryui][download][url]  = "http://jqueryui.com/resources/download/jquery-ui-1.10.2.zip"
+libraries[jqueryui][download][url]  = "http://jqueryui.com/resources/download/jquery-ui-1.9.2.zip"
 libraries[jqueryui][directory_name] = "jquery.ui"
 
 libraries[elfinder][download][type] = "get"
