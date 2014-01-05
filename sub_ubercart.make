@@ -21,4 +21,5 @@ projects[] = uc_pma
 projects[] = uc_product_power_tools
 projects[] = uc_product_quote
 projects[] = uc_simple_quote
+projects[] = uc_tc
 projects[] = uc_vat
