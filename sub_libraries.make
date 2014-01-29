@@ -41,10 +41,6 @@ libraries[gitter][download][type] = "git"
 libraries[gitter][download][url] = "git://github.com/skwashd/gitter.git"
 libraries[gitter][destination] = "libraries"
 
-projects[geshi][type] = "library"
-projects[geshi][download][type] = "svn"
-projects[geshi][download][url] = "https://geshi.svn.sourceforge.net/svnroot/geshi/tags/RELEASE_1_0_8_10/geshi-1.0.X/src/"
-
 libraries[jquery.cycle][download][type] = "file"
 libraries[jquery.cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
 
