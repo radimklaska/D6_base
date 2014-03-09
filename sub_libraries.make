@@ -32,8 +32,8 @@ libraries[turn.js][download][url] = "git://github.com/blasten/turn.js.git"
 libraries[turn.js][directory_name] = "turn.js"
 libraries[turn.js][destination] = "libraries"
 
-libraries[tinymce][download][type] = get
-libraries[tinymce][download][url] = https://github.com/downloads/tinymce/tinymce/tinymce_3.4.9.zip
+libraries[tinymce][download][type] = "git"
+libraries[tinymce][download][url] = "git://github.com/radimklaska/tiny_mce_cz.git"
 libraries[tinymce][directory_name] = "tinymce"
 libraries[tinymce][destination] = "libraries"
 
