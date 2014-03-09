@@ -11,6 +11,8 @@ projects[jquery_ui][patch][] = "http://drupal.org/files/1954136-3-jquery_ui_vers
 
 ; Common modules
 ; --------
+projects[] = media_youtube
+projects[] = less
 projects[] = acl
 projects[] = addanother
 projects[] = addtoany
