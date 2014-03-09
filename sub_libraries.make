@@ -32,8 +32,8 @@ libraries[turn.js][download][url] = "git://github.com/blasten/turn.js.git"
 libraries[turn.js][directory_name] = "turn.js"
 libraries[turn.js][destination] = "libraries"
 
-libraries[tinymce][download][type] = "get"
-libraries[tinymce][download][url]  = "https://github.com/tinymce/tinymce/archive/3.5.10.zip"
+libraries[tinymce][download][type] = "git"
+libraries[tinymce][download][url] = "git://github.com/radimklaska/tiny_mce_cz.git"
 libraries[tinymce][directory_name] = "tinymce"
 libraries[tinymce][destination] = "libraries"
 
@@ -85,5 +85,5 @@ projects[getid3_lib][download][url] = http://downloads.sourceforge.net/project/g
 projects[getid3_lib][directory_name] = getid3
 
 libraries[facebook-php-sdk][download][type] = "get"
-libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/facebook-php-sdk/zipball/v3.1.1"
+libraries[facebook-php-sdk][download][url] = "http://github.com/facebook/facebook-php-sdk/archive/v3.1.1.zip"
 libraries[facebook-php-sdk][destination] = "libraries"
