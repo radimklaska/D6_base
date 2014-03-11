@@ -26,7 +26,7 @@ projects[og_forum][subdir] = custom
 ; Modules
 ; --------
 
-projects[uc_attribute_option_desc][type] = theme
+projects[uc_attribute_option_desc][type] = module
 projects[uc_attribute_option_desc][download][type] = git
 projects[uc_attribute_option_desc][download][url] = "git@bitbucket.org:radimklaska/uc_attribute_option_desc.git"
 projects[uc_attribute_option_desc][subdir] = custom
