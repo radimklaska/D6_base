@@ -36,6 +36,7 @@ projects[] = comment_notify
 projects[] = contemplate
 projects[] = context
 projects[] = contextual
+projects[] = countdown
 projects[] = css_injector
 projects[] = ctools
 projects[] = cufon
