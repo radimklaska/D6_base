@@ -60,7 +60,6 @@ projects[] = fb_social
 projects[] = fbconnect
 projects[] = features
 projects[] = feedapi
-projects[] = feedapi_mapper
 projects[] = feedback
 projects[] = feedburner
 projects[] = feeds
