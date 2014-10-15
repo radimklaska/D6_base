@@ -201,6 +201,5 @@ projects[] = xmlsitemap
 projects[] = acquia_prosper
 projects[] = fusion
 projects[] = ninesixty
-projects[] = omega
 projects[] = rootcandy
 projects[] = polpo
