@@ -8,6 +8,18 @@ projects[views_slideshow][version] = 2.4
 ; jQuery_ui is unable to detect installed version of JQuery UI 1.8+ because version.txt does not exist (patch attached) http://drupal.org/node/1954136#comment-7225612
 projects[jquery_ui][patch][] = "http://drupal.org/files/1954136-3-jquery_ui_version_not_detected.patch"
 
+; They rolled back 6.x-1.15-beta1 as recommended release (6.x-1.14 is recommended now), but we can't go back...
+projects[nodewords][type] = module
+projects[nodewords][download][type] = git
+projects[nodewords][download][url] = "http://git.drupal.org/project/nodewords.git"
+projects[nodewords][download][tag] = "6.x-1.15-beta1"
+
+; They rolled back 6.x-1.9-beta3 as recommended release (6.x-1.8 is recommended now), but we can't go back...
+projects[feedapi][type] = module
+projects[feedapi][download][type] = git
+projects[feedapi][download][url] = "http://git.drupal.org/project/feedapi.git"
+projects[feedapi][download][tag] = "6.x-1.9-beta3"
+
 
 ; Common modules
 ; --------
@@ -59,7 +71,6 @@ projects[] = fb
 projects[] = fb_social
 projects[] = fbconnect
 projects[] = features
-projects[] = feedapi
 projects[] = feedback
 projects[] = feedburner
 projects[] = feeds
@@ -124,7 +135,6 @@ projects[] = nodeformcols
 projects[] = nodelocation_relationship
 projects[] = nodereference_url
 projects[] = nodereferrer
-projects[] = nodewords
 projects[] = notifications
 projects[] = notifications_extra
 projects[] = notifications_team
