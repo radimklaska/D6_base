@@ -8,6 +8,11 @@ projects[uc_advanced_catalog][patch][] = "http://drupal.org/files/function_ereg_
 ; 1.4 version has bug in .install see: https://drupal.org/node/438714#comment-1907078
 projects[uc_option_image][version] = 1.x-dev
 
+projects[uc_heureka][type] = module
+projects[uc_heureka][download][type] = git
+projects[uc_heureka][download][url] = "http://git.drupal.org/sandbox/blazas/1907106.git"
+projects[uc_heureka][download][branch] = "6.x-1.x"
+
 ; Common modules
 ; --------
 projects[] = ubercart
