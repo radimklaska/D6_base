@@ -168,6 +168,7 @@ projects[] = shurly
 projects[] = signup
 projects[] = signup_status
 projects[] = skinr
+projects[] = smtp
 projects[] = spaces
 projects[] = special_menu_items
 projects[] = stringoverrides
