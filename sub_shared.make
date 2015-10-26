@@ -20,6 +20,16 @@ projects[feedapi][download][type] = git
 projects[feedapi][download][url] = "http://git.drupal.org/project/feedapi.git"
 projects[feedapi][download][tag] = "6.x-1.9-beta3"
 
+; Sub make file is not piscked up any more.
+; See http://cgit.drupalcode.org/smtp/commit/?h=6.x-1.x&id=7cafe6df2b60e82196baa8265bd64d433cbd7db0
+; Also the destination was wrong since this make file does not use the /contrib sub directory.
+projects[smtp][version] = 1.x-dev
+libraries[phpmailer][download][type] = "get"
+libraries[phpmailer][download][url] = "http://downloads.sourceforge.net/project/phpmailer/phpmailer%20for%20php5_6/Previous%20Versions/2.2.1/phpMailer_v2.2.1_.tar.gz"
+libraries[phpmailer][directory_name] = "phpmailer"
+libraries[phpmailer][destination] = "modules/smtp"
+libraries[phpmailer][patch][drupal-compatibility][url] = "http://drupalcode.org/project/smtp.git/blob_plain/2acaba97adcad7304c22624ceeb009d358b596e3:/class.phpmailer.php.2.2.1.patch"
+
 
 ; Common modules
 ; --------
@@ -168,7 +178,6 @@ projects[] = shurly
 projects[] = signup
 projects[] = signup_status
 projects[] = skinr
-projects[] = smtp
 projects[] = spaces
 projects[] = special_menu_items
 projects[] = stringoverrides
