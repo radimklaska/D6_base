@@ -74,6 +74,7 @@ projects[] = ds
 projects[] = elfinder
 projects[] = email
 projects[] = emfield
+projects[] = eu_cookie_compliance
 projects[] = expire
 projects[] = extlink
 projects[] = faq
